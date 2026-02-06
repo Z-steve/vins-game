@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Music Tiles 3D</title>
+    <style>
+      body { 
+        margin: 0; 
+        overflow: hidden; /* Niente scrollbar */
+        background-color: #111; /* Sfondo nero pre-caricamento */
+        font-family: Arial, sans-serif;
+      }
+      
+      canvas { 
+        display: block; /* Rimuove margini strani del canvas */
+      }
+
+      /* OVERLAY PER OBBLIGARE PORTRAIT (Opzionale ma consigliato) */
+      /* Se l'utente mette il telefono in orizzontale, gli chiediamo di girarlo */
+      #rotate-warning {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: #000;
+        z-index: 9999;
+        color: white;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+      @media screen and (orientation: landscape) {
+        #rotate-warning {
+          display: flex; /* Mostra l'avviso solo se è landscape */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    
+    <div id="rotate-warning">
+      <h1>📱</h1>
+      <p>Per favore, ruota il telefono<br>in verticale per giocare.</p>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
