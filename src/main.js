@@ -27,6 +27,7 @@ let scene, camera, renderer;
 let ball;
 let tiles = [];
 let tilesSpawnedCount = 0; 
+const clock = new THREE.Clock();
 
 // Variabili Audio
 let audioListener = null;
@@ -67,7 +68,7 @@ function init() {
     // 3. RENDERER
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     document.body.appendChild(renderer.domElement);
 
     // 4. LUCI
@@ -78,7 +79,7 @@ function init() {
     scene.add(dirLight);
 
     // 5. PALLINA 
-    const geometry = new THREE.SphereGeometry(0.4, 32, 32);
+    const geometry = new THREE.SphereGeometry(0.4, 16, 16);
     const material = new THREE.MeshStandardMaterial({ 
         color: CONFIG.ballColor,
         roughness: 0.2,
@@ -233,7 +234,7 @@ function initAudioSystem() {
     fileNames.forEach((file) => {
         const sound = new THREE.Audio(audioListener);
         audioLayers.push(sound);
-        audioLoader.load(`/audio/${file}`, (buffer) => {
+        audioLoader.load(`./audio/${file}`, (buffer) => {
             sound.setBuffer(buffer);
             sound.setLoop(true);
             sound.setVolume(0); 
@@ -454,6 +455,12 @@ function onWindowResize() {
 
 function animate() {
     requestAnimationFrame(animate);
-    update(0.016);
+    
+    const delta = clock.getDelta(); // Tempo reale trascorso dall'ultimo frame
+    // Se il telefono si blocca per un secondo, non vogliamo un salto temporale enorme.
+    // Limitiamo il delta a massimo 0.1 secondi (10fps minimi) per sicurezza fisica.
+    const safeDelta = Math.min(delta, 0.1);
+
+    update(safeDelta); // Passiamo il tempo vero alla funzione update
     renderer.render(scene, camera);
 }
