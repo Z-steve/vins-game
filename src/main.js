@@ -9,13 +9,13 @@ const CONFIG = {
     bgColor: 0x111111,
     
     // Gameplay
-    initSpeed: 14.0,       
+    initSpeed: 18.0,       
     maxSpeed: 30.0,        
     speedIncrement: 0.001, 
     
     // Fisica
-    gravity: -25.0,        
-    jumpForce: 12.0,       
+    gravity: -32.0,        
+    jumpForce: 14.0,       
     
     // Dimensioni
     laneWidth: 6,          
@@ -65,10 +65,18 @@ function init() {
     camera.position.set(0, 7, 12); 
     camera.lookAt(0, 0, -5);
 
-    // 3. RENDERER
-    renderer = new THREE.WebGLRenderer({ antialias: true });
+    // 3. RENDERER (OTTIMIZZATO PER MOBILE)
+    // Disattiviamo antialias per guadagnare FPS
+    // powerPreference: "high-performance" suggerisce al telefono di usare la GPU al massimo
+    renderer = new THREE.WebGLRenderer({ 
+        antialias: false, 
+        powerPreference: "high-performance" 
+    });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    // IMPORTANTE: Forziamo pixel ratio a 1. 
+    // Su iPhone Retina è 3, il che significa che deve calcolare 9 volte i pixel necessari!
+    // Mettendo 1, il gioco diventa una scheggia e su schermo piccolo si vede bene uguale.
+    renderer.setPixelRatio(1); 
     document.body.appendChild(renderer.domElement);
 
     // 4. LUCI
